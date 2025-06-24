@@ -13,27 +13,46 @@ export const searchBills = async (type, query, page = 0, size = 10) => {
 
     if (type === "billTitle") {
         url = `/bills/search?title=${encodedQuery}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "proposers") {
         url = `/proposers/search?keyword=${encodedQuery}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
+    } else if (type === "proposerInfo") {
+        url = `/bills/search?proposer=${encodedQuery}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "detail") {
         url = `/bills/search?detail=${encodedQuery}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "titleProposer") {
         const [title, proposer] = splitSearchQuery(query, 2);
         url = `/bills/search?title=${encodeURIComponent(title)}&proposer=${encodeURIComponent(proposer || '')}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "titleProposerDetail") {
         const [title, proposer, detail] = splitSearchQuery(query, 3);
         url = `/bills/search?title=${encodeURIComponent(title)}&proposer=${encodeURIComponent(proposer || '')}&detail=${encodeURIComponent(detail || '')}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "committee") {
         url = `/bills/search?committee=${encodedQuery}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
     } else if (type === "all") {
         const [title, proposer, detail, committee] = splitSearchQuery(query, 4);
         url = `/bills/search?title=${encodeURIComponent(title)}&proposer=${encodeURIComponent(proposer || '')}&detail=${encodeURIComponent(detail || '')}&committee=${encodeURIComponent(committee || '')}&page=${page}&size=${size}`;
+        const response = await apiClient.get(url);
+        return response.data;
+    } else if (type === "embeding") {
+        // 자연어 검색: POST 방식
+        const response = await apiClient.post('/recommend', { query });
+        return response.data;
     } else {
         throw new Error("지원하지 않는 검색 타입입니다.");
     }
-
-    const response = await apiClient.get(url);
-    return response.data;
 };
 
 // 사용자 친화적인 검색 설명 포맷

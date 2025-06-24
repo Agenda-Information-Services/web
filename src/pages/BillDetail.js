@@ -45,6 +45,8 @@ const BillDetail = () => {
 
         if (content.startsWith("제안이유 및 주요내용")) {
             content = content.slice("제안이유 및 주요내용".length).trimStart();
+        } else if (content.startsWith("제안이유")) {
+            content = content.slice("제안이유".length).trimStart();
         }
 
         const usedTerms = new Set();
@@ -119,6 +121,28 @@ const BillDetail = () => {
             );
         } catch {
             return <p style={{ lineHeight: "1.8" }}>{bill.summary}</p>;
+        }
+    };
+
+    const formatTerm = () => {
+        try{
+            const term= JSON.parse (bill.term || '{}');
+            if(!Array.isArray(term.terms) || term.terms.length===0){
+                return <p style={{lineHeight:'1.8'}}>용어 정보가 없습니다.</p>;
+            }
+            return (
+                <>
+                    <ul style={{paddingLeft:'20px', marginTop: '10px'}}>
+                        {term.terms.map((item, idx) =>(
+                            <li key={idx} style={{marginBottom:'8px', lineHeight:'1.8'}}>
+                                <strong>{item.term}</strong>:{item.description}
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )
+        } catch{
+            return <p style={{lineHeight:'1.8'}}>용어 정보가 없습니다.</p>;
         }
     };
 
@@ -234,6 +258,12 @@ const BillDetail = () => {
                     <h3>영향 예측</h3>
                     <Card>{formatPrediction()}</Card>
                 </div>
+
+                <div style={{padding: "12px 0px"}}>
+                    <h3>용어 설명</h3>
+                    <Card>{formatTerm()}</Card>
+                </div>
+
 
                 <div style={{padding: "12px 0px"}}>
                     <h3>투표하기</h3>

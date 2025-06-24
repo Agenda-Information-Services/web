@@ -26,9 +26,15 @@ const SearchResult = () => {
     const fetchData = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await searchBills(searchType, searchQuery, page - 1, pageSize);
-            setSearchResults(response.content);
-            setTotalElements(response.totalElements);
+            if (searchType === "embeding") {
+                const response = await searchBills(searchType, searchQuery);
+                setSearchResults(response.slice((page - 1) * pageSize, page * pageSize));
+                setTotalElements(response.length);
+            } else {
+                const response = await searchBills(searchType, searchQuery, page - 1, pageSize);
+                setSearchResults(response.content);
+                setTotalElements(response.totalElements);
+            }
         } catch (error) {
             message.error("검색 중 오류가 발생했습니다.");
         } finally {
@@ -101,12 +107,14 @@ const SearchResult = () => {
                     onChange={setSearchType}
                 >
                     <Option value="billTitle">법안명</Option>
-                    <Option value="proposers">발의자</Option>
+                    <Option value="proposers">발의자 정보</Option>
+                    <Option value="proposerInfo">발의자 기준</Option>
                     <Option value="detail">내용</Option>
                     <Option value="titleProposer">법안명+발의자</Option>
                     <Option value="titleProposerDetail">법안명+발의자+내용</Option>
                     <Option value="committee">소관위</Option>
                     <Option value="all">종합</Option>
+                    <Option value="embeding">자연어 검색</Option>
                 </Select>
                 <Input
                     placeholder="궁금한 발의안을 검색해보세요!"
