@@ -33,10 +33,9 @@ const Ranking = () => {
 
     return (
         <div style={styles.container}>
-            {/* 토론 활발 법안 카드 */}
             <div style={{ width: "45%" }}>
                 <Card style={styles.card}>
-                    <h2 style={styles.cardTitle}>토론이 활발한 법안</h2>
+                    <h2 style={styles.cardTitle}>사람들이 많이 저장한 법안</h2>
                     {bookmarkRanking.length > 0 ? (
                         bookmarkRanking.map((bill, index) => (
                             <div
@@ -57,7 +56,7 @@ const Ranking = () => {
             {/* 조회수 높은 법안 카드 */}
             <div style={{ width: "45%" }}>
                 <Card style={styles.card}>
-                    <h2 style={styles.cardTitle}>조회수가 높은 법안</h2>
+                    <h2 style={styles.cardTitle}>사람들이 많이 본 법안</h2>
                     {viewRanking.length > 0 ? (
                         viewRanking.map((bill, index) => (
                             <div
@@ -83,7 +82,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 'calc(100vh - 194px)' // 헤더(64) + 퀵메뉴(130) 높이 제외
+        height: 'calc(100vh - 194px)'
     },
     container: {
         display: 'flex',
