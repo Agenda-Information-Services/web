@@ -11,6 +11,9 @@ import discussIcon from "../assets/icons/discuss.gif";
 import discussIcon2 from "../assets/icons/discuss.png";
 import listIcon from "../assets/icons/list.gif";
 import listIcon2 from "../assets/icons/list.png";
+import proposerIcon from "../assets/icons/proposer.gif";
+import proposerIcon2 from "../assets/icons/proposer.png";
+
 
 const menuItems = [
     {
@@ -43,6 +46,12 @@ const menuItems = [
         staticIcon: listIcon2,
         hoverIcon: listIcon,
     },
+    {
+        label:"발의자 리스트",
+        path:"/proposers",
+        staticIcon: proposerIcon2,
+        hoverIcon: proposerIcon
+    }
 ];
 
 const QuickMenu = () => {

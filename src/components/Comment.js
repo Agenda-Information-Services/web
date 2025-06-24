@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, List, Form, message, Avatar, Modal } from 'antd';
+import { Input, Button, List, Form, Avatar, Modal } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
@@ -39,10 +39,10 @@ const Comment = ({ comment, onEditComment, onDeleteComment, onReportComment, lev
         <div style={{ marginLeft: level > 0 ? `${level * 40}px` : '0px' }}>
             <List.Item
                 actions={[
-                    <Button type="link" onClick={handleEdit}>수정</Button>,
-                    <Button type="link" danger onClick={() => onDeleteComment(comment.id)}>삭제</Button>,
-                    <Button type="link" style={{color: 'orange'}} onClick={handleReport}>신고</Button>
-                ]}
+                    isMyComment && <Button type="link" onClick={handleEdit}>수정</Button>,
+                    isMyComment && <Button type="link" danger onClick={() => onDeleteComment(comment.id)}>삭제</Button>,
+                    !isMyComment && <Button type="link" style={{color: 'orange'}} onClick={handleReport}>신고</Button>
+                ].filter(Boolean)}
             >
                 {isEditing ? (
                     <Form form={editForm} onFinish={handleEditSubmit} style={{ width: '100%' }}>

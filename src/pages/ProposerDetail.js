@@ -72,11 +72,13 @@ const ProposerDetail = () => {
 
 const styles = {
     layout: {
-        backgroundColor: "#fff",
-        minHeight: "100vh",
+        height:"100vh",
+        overflow:"hidden",
     },
     content: {
-        padding: "20px 20%",
+        height:"calc(100vh-180px)",
+        overflowY:"auto",
+        padding:"24px 20%",
     },
     loading: {
         height: "100vh",

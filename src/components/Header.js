@@ -60,19 +60,44 @@ const UserHeader = () => {
 
     const loginContent = (
         <Form onFinish={handleLogin} layout="vertical" style={{ width: 250 }}>
-            <Form.Item name="uid" label="아이디" rules={[{ required: true }]}>
+            <Form.Item
+                name="uid"
+                label="아이디"
+                rules={[{ required: true, message: '' }]}
+                style={{ marginBottom: 10 }}
+            >
                 <Input size="small" />
             </Form.Item>
-            <Form.Item name="password" label="비밀번호" rules={[{ required: true }]}>
+            <Form.Item
+                name="password"
+                label="비밀번호"
+                rules={[{ required: true, message: '' }]}
+                style={{ marginBottom: 15 }}
+            >
                 <Input.Password size="small" />
             </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" size="small" block>
+            <Form.Item style={{ marginBottom: 8 }}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    size="middle"
+                    style={{ fontSize: '15px' }}
+                    block
+                >
                     로그인
                 </Button>
             </Form.Item>
-            <Form.Item>
-                <Button type="link" size="small" block onClick={() => navigate("/signup")}>
+            <Form.Item style={{ marginBottom: 5 }}>
+                <Button
+                    type="default"
+                    style={{ fontSize: '15px' }}
+                    size="middle"
+                    block
+                    onClick={() => {
+                        setPopoverVisible(false);
+                        navigate("/signup");
+                    }}
+                >
                     회원가입
                 </Button>
             </Form.Item>
@@ -86,36 +111,23 @@ const UserHeader = () => {
                 <Title level={4} style={{margin: 0}}>LegisLink</Title>
             </div>
 
-
             <div style={styles.userSection}>
             {isLoggedIn ? (
                     <>
                         <Avatar icon={<UserOutlined/>}/>
                         <span style={styles.username}>{username}</span>
-                        <span
-                            style={styles.mypage}
-                            onClick={() => navigate("/mypage")}
-                        >
-                            마이페이지
-                        </span>
-
+                        <span style={styles.mypage} onClick={() => navigate("/mypage")}>
+                            마이페이지</span>
                         {(role === "ADMIN") && (
-                            <Button
-                                type="link"
-                                onClick={() => navigate("/admin")}
-                            >
-                                관리자페이지
-                            </Button>
+                            <Button type="link" onClick={() => navigate("/admin")}>
+                                관리자페이지</Button>
                         )}
-
                         <Button type="link" onClick={handleLogout}>
-                            로그아웃
-                        </Button>
+                            로그아웃</Button>
                     </>
                 ) : (
                     <Popover
                         content={loginContent}
-                        title="로그인"
                         trigger="click"
                         open={popoverVisible}
                         onOpenChange={setPopoverVisible}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {Layout, Table, Button, Tag, message, Modal, Descriptions} from "antd";
-import {getAllUsers, suspendUser, resumeUser, getUserDetail} from "../../api/admin/userAPI";
+import { Layout, Table, Button, Tag, message, Modal, Descriptions } from "antd";
+import { getAllUsers, suspendUser, resumeUser, getUserDetail } from "../../api/admin/userAPI";
 
 const { Content } = Layout;
 
@@ -15,7 +15,7 @@ const UserManagement = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await getAllUsers(); // ✅ res는 이미 배열임
+            const res = await getAllUsers();
             setUsers(res);
         } catch (err) {
             message.error("사용자 목록을 불러오는 데 실패했습니다.");
@@ -72,14 +72,6 @@ const UserManagement = () => {
                     ) : (
                         <Button onClick={() => handleUnsuspend(record.userId)}>정지 해제</Button>
                     )}
-                </>
-            ),
-        },
-        {
-            title: "상세 정보",
-            key: "action",
-            render: (_, record) => (
-                <>
                     <Button style={{ marginLeft: 8 }} onClick={() => handleViewDetail(record.userId)}>
                         상세보기
                     </Button>
@@ -89,38 +81,35 @@ const UserManagement = () => {
     ];
 
     return (
-        <Layout style={{ minHeight: "calc(100vh - 64px)", backgroundColor: "#fff" }}>
-            <Content style={{ padding: "30px" }}>
-                <h2 style={{ fontSize: "20px", fontWeight: 600 }}>사용자 관리</h2>
-                <Table
-                    columns={columns}
-                    dataSource={users}
-                    rowKey={(record) => record.uid}
-                    pagination={{ pageSize: 10 }}
-                    style={{ marginTop: 20 }}
-                />
-                <Modal
-                    title="사용자 상세 정보"
-                    open={modalVisible}
-                    onCancel={() => setModalVisible(false)}
-                    footer={<Button onClick={() => setModalVisible(false)}>닫기</Button>}
-                >
-                    {selectedUser ? (
-                        <Descriptions bordered column={1}>
-                            <Descriptions.Item label="ID">{selectedUser.userId}</Descriptions.Item>
-                            <Descriptions.Item label="이름">{selectedUser.name}</Descriptions.Item>
-                            <Descriptions.Item label="닉네임">{selectedUser.nickName}</Descriptions.Item>
-                            <Descriptions.Item label="UID">{selectedUser.uid}</Descriptions.Item>
-                            <Descriptions.Item label="이메일">{selectedUser.email}</Descriptions.Item>
-                            <Descriptions.Item label="전화번호">{selectedUser.phoneNumber}</Descriptions.Item>
-                            <Descriptions.Item label="권한">{selectedUser.role}</Descriptions.Item>
-                        </Descriptions>
-                    ) : (
-                        <p>불러오는 중...</p>
-                    )}
-                </Modal>
-            </Content>
-        </Layout>
+        <div>
+            <Table
+                size="small"
+                columns={columns}
+                dataSource={users}
+                rowKey={(record) => record.uid}
+                pagination={{ pageSize: 8 }}
+            />
+            <Modal
+                title="사용자 상세 정보"
+                open={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                footer={<Button onClick={() => setModalVisible(false)}>닫기</Button>}
+            >
+                {selectedUser ? (
+                    <Descriptions bordered column={1}>
+                        <Descriptions.Item label="ID">{selectedUser.userId}</Descriptions.Item>
+                        <Descriptions.Item label="이름">{selectedUser.name}</Descriptions.Item>
+                        <Descriptions.Item label="닉네임">{selectedUser.nickName}</Descriptions.Item>
+                        <Descriptions.Item label="UID">{selectedUser.uid}</Descriptions.Item>
+                        <Descriptions.Item label="이메일">{selectedUser.email}</Descriptions.Item>
+                        <Descriptions.Item label="전화번호">{selectedUser.phoneNumber}</Descriptions.Item>
+                        <Descriptions.Item label="권한">{selectedUser.role}</Descriptions.Item>
+                    </Descriptions>
+                ) : (
+                    <p>불러오는 중...</p>
+                )}
+            </Modal>
+        </div>
     );
 };
 

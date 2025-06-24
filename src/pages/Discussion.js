@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Typography, Button, message, Spin } from "antd";
+import { Table, Typography, Button, message, Spin, Form, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { getAllPosts } from "../api/userfnc/postAPI";
+import { getAllPosts, createPost } from "../api/userfnc/postAPI";
 
 const { Title } = Typography;
 
@@ -9,6 +9,8 @@ const Discussion = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,6 +29,21 @@ const Discussion = () => {
 
   const handleRowClick = (record) => {
     navigate(`/discussion/${record.postId}`);
+  };
+
+  const handleCreatePost = async (values) => {
+    try {
+      await createPost(values.postTitle, values.content);
+      message.success("게시글이 등록되었습니다.");
+      setIsModalVisible(false);
+      form.resetFields();
+      // 게시글 목록 새로고침
+      const response = await getAllPosts();
+      const sortedPosts = response.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
+      setPosts(sortedPosts);
+    } catch (error) {
+      message.error("게시글 등록에 실패했습니다.");
+    }
   };
 
   const columns = [
@@ -67,7 +84,7 @@ const Discussion = () => {
               title={() => (
                   <div style={styles.header}>
                     <Title level={2} style={styles.boardTitle}>토론 게시판</Title>
-                    <Button type="primary">새 글 작성</Button>
+                    <Button type="primary" onClick={() => setIsModalVisible(true)}>새 글 작성</Button>
                   </div>
               )}
               columns={columns}
@@ -81,6 +98,25 @@ const Discussion = () => {
               style={{ marginBottom: '0px' }}
           />
         </div>
+        <Modal
+          title="새 글 작성"
+          open={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={null}
+        >
+          <Form form={form} onFinish={handleCreatePost} layout="vertical">
+            <Form.Item name="postTitle" label="제목" rules={[{ required: true, message: '제목을 입력하세요.' }]}> 
+              <Input placeholder="제목을 입력하세요" />
+            </Form.Item>
+            <Form.Item name="content" label="내용" rules={[{ required: true, message: '내용을 입력하세요.' }]}> 
+              <Input.TextArea rows={6} placeholder="내용을 입력하세요" />
+            </Form.Item>
+            <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
+              <Button onClick={() => setIsModalVisible(false)} style={{ marginRight: 8 }}>취소</Button>
+              <Button type="primary" htmlType="submit">등록</Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
   );
 };

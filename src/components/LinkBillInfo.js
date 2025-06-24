@@ -28,8 +28,8 @@ const LinkBillInfo = ({ billId }) => {
             alt="의안정보시스템에서 보기"
             onClick={handleDownload}
             style={{
-                width: '100px',
-                height: '20px',
+                width: 'auto',
+                height:'20px',
                 cursor: 'pointer',
                 marginLeft: '10px',
                 opacity: loading ? 0.5 : 1,

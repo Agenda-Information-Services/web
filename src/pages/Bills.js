@@ -143,7 +143,7 @@ const styles = {
     resultTitleWrapper: {
         display: "flex",
         alignItems: "center",
-        gap: "8px",
+        gap: "3px",
     },
     resultTitle: {
         fontSize: "1.2em",

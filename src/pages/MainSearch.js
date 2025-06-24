@@ -31,12 +31,14 @@ const MainPage = () => {
                         onChange={setSearchType}
                     >
                         <Option value="billTitle">법안명</Option>
-                        <Option value="proposers">발의자</Option>
+                        <Option value="proposers">발의자 정보</Option>
+                        <Option value="proposerInfo">발의자 기준</Option>
                         <Option value="detail">내용</Option>
                         <Option value="titleProposer">법안명+발의자</Option>
                         <Option value="titleProposerDetail">법안명+발의자+내용</Option>
                         <Option value="committee">소관위</Option>
                         <Option value="all">종합</Option>
+                        <Option value="embeding">자연어 검색</Option>
 
                     </Select>
                     <Input

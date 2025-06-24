@@ -54,7 +54,7 @@ const Bookmark = ({ id }) => {
                 border: 'none',
                 cursor: 'pointer',
                 padding: '5px',
-                marginRight: '10px',
+                //marginRight: '10px',
                 display: 'flex',
                 alignItems: 'center'
             }}
@@ -63,7 +63,7 @@ const Bookmark = ({ id }) => {
             <BookOutlined 
                 style={{ 
                     fontSize: '24px',
-                    color: isBookmarked ? '#000000' : '#CCCCCC',
+                    color: isBookmarked ? '#F3AD3C' : '#000000' ,
                     transition: 'color 0.3s ease'
                 }} 
             />

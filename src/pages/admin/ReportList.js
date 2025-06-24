@@ -1,4 +1,4 @@
-/*
+
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import fetchReportListAPI from "../../api/admin/fetchReportListAPI";
@@ -27,4 +27,3 @@ const ReportList = () => {
 };
 
 export default ReportList;
-*/

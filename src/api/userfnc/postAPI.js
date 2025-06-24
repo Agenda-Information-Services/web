@@ -41,3 +41,13 @@ export const reportPost = async (targetId, reason) => {
     });
     return response.data;
 };
+
+export const getMyPosts = async () => {
+    try {
+        const response = await apiClient.get('/posts/my');
+        return response.data;
+    } catch (error) {
+        console.error("내가 작성한 게시글을 불러오는 중 오류 발생:", error);
+        throw error;
+    }
+};
