@@ -122,6 +122,28 @@ const BillDetail = () => {
         }
     };
 
+    const formatTerm = () => {
+        try{
+            const term= JSON.parse (bill.term || '{}');
+            if(!Array.isArray(term.terms) || term.terms.length===0){
+                return <p style={{lineHeight:'1.8'}}>용어 정보가 없습니다.</p>;
+            }
+            return (
+                <>
+                    <ul style={{paddingLeft:'20px', marginTop: '10px'}}>
+                        {term.terms.map((item, idx) =>(
+                            <li key={idx} style={{marginBottom:'8px', lineHeight:'1.8'}}>
+                                <strong>{item.term}</strong>:{item.description}
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )
+        } catch{
+            return <p style={{lineHeight:'1.8'}}>용어 정보가 없습니다.</p>;
+        }
+    };
+
     useEffect(() => {
         const handleMouseOver = (e) => {
             const target = e.target;
@@ -234,6 +256,12 @@ const BillDetail = () => {
                     <h3>영향 예측</h3>
                     <Card>{formatPrediction()}</Card>
                 </div>
+
+                <div style={{padding: "12px 0px"}}>
+                    <h3>용어 설명</h3>
+                    <Card>{formatTerm()}</Card>
+                </div>
+
 
                 <div style={{padding: "12px 0px"}}>
                     <h3>투표하기</h3>
