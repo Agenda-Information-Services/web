@@ -1,7 +1,9 @@
 import './styles/fonts.css';
 import 'antd/dist/reset.css';
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import MainSearch from "./pages/MainSearch";
 import Signup from "./pages/Signup";
@@ -20,33 +22,79 @@ import AdminReportPage from "./pages/admin/AdminReportPage";
 import AdminReportDetailPage from "./pages/admin/AdminReportDetailPage";
 import Recommend from "./pages/RecommendedBills";
 import MainLayout from './components/MainLayout';
+import SurveyPopup from './components/SurveyPopup';
+
+const SURVEY_THRESHOLD_MINUTES = 5;
+const SURVEY_THRESHOLD_PAGES = 9;
+const SURVEY_LINK = "https://forms.gle/T5dfHL2TFuzmvXWG8";
+
+const useSurveyTrigger = () => {
+    const location = useLocation();
+    const [pageCount, setPageCount] = useState(0);
+    const [showSurvey, setShowSurvey] = useState(false);
+
+    const handleClose = useCallback(() => {
+        setShowSurvey(false);
+        sessionStorage.setItem('survey_seen', 'true');
+    }, []);
+
+    useEffect(() => {
+        setPageCount(prev => {
+            const newCount = prev + 1;
+            if (newCount >= SURVEY_THRESHOLD_PAGES && !sessionStorage.getItem('survey_seen')) setShowSurvey(true);
+            return newCount;
+        });
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (sessionStorage.getItem('survey_seen') || showSurvey) return;
+        const timer = setTimeout(() => {
+            setShowSurvey(true);
+        }, SURVEY_THRESHOLD_MINUTES * 60 * 1000);
+        return () => clearTimeout(timer);
+    }, [showSurvey]);
+    return { showSurvey, handleClose };
+};
+
+const AppContent = () => {
+    const { showSurvey, handleClose } = useSurveyTrigger();
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/" element={<MainLayout><MainSearch /></MainLayout>} />
+                <Route path="/discussion" element={<MainLayout><Discussion /></MainLayout>} />
+                <Route path="/discussion/:postId" element={<MainLayout><DiscussionDetail /></MainLayout>} />
+                <Route path="/ranking" element={<MainLayout><Ranking /></MainLayout>} />
+                <Route path="/searchresult" element={<MainLayout><SearchResult /></MainLayout>} />
+                <Route path="/bills/:billId" element={<MainLayout><BillDetail /></MainLayout>} />
+                <Route path="/proposers/:proposerId" element={<MainLayout><ProposerDetail /></MainLayout>} />
+                <Route path="/bills" element={<MainLayout><Bills /></MainLayout>} />
+                <Route path="/proposers" element={<MainLayout><Proposers /></MainLayout>} />
+
+                <Route path="/signup" element={<Signup />} />
+
+                <Route path="/mypage" element={<PrivateRoute><MyPage /></PrivateRoute>} />
+                <Route path="/recommend" element={<PrivateRoute><MainLayout><Recommend /></MainLayout></PrivateRoute>} />
+
+                <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                <Route path="/admin/reports" element={<AdminRoute><AdminReportPage /></AdminRoute>} />
+                <Route path="/admin/report/:reportId" element={<AdminRoute><AdminReportDetailPage /></AdminRoute>} />
+            </Routes>
+
+            <SurveyPopup
+                isVisible={showSurvey}
+                onClose={handleClose}
+                surveyLink={SURVEY_LINK}
+            />
+        </div>
+    );
+};
 
 const App = () => {
     return (
-        <>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<MainLayout><MainSearch /></MainLayout>} />
-                    <Route path="/discussion" element={<MainLayout><Discussion /></MainLayout>} />
-                    <Route path="/discussion/:postId" element={<MainLayout><DiscussionDetail /></MainLayout>} />
-                    <Route path="/ranking" element={<MainLayout><Ranking /></MainLayout>} />
-                    <Route path="/searchresult" element={<MainLayout><SearchResult /></MainLayout>} />
-                    <Route path="/bills/:billId" element={<MainLayout><BillDetail /></MainLayout>} />
-                    <Route path="/proposers/:proposerId" element={<MainLayout><ProposerDetail /></MainLayout>} />
-                    <Route path="/bills" element={<MainLayout><Bills /></MainLayout>} />
-                    <Route path="/proposers" element={<MainLayout><Proposers /></MainLayout>} />
-
-                    <Route path="/signup" element={<Signup />} />
-
-                    <Route path="/mypage" element={<PrivateRoute><MyPage /></PrivateRoute>} />
-                    <Route path="/recommend" element={<PrivateRoute><MainLayout><Recommend /></MainLayout></PrivateRoute>} />
-
-                    <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                    <Route path="/admin/reports" element={<AdminRoute><AdminReportPage /></AdminRoute>} />
-                    <Route path="/admin/report/:reportId" element={<AdminRoute><AdminReportDetailPage /></AdminRoute>} />
-                </Routes>
-            </Router>
-        </>
+        <Router>
+            <AppContent />
+        </Router>
     );
 };
 
