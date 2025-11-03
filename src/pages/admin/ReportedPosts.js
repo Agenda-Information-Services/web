@@ -13,10 +13,40 @@ const ReportedPosts = () => {
 
     const fetchReports = async () => {
         try {
-            const testUserId = "1";
-            const res = await getReportedPostsByUser(testUserId);
-            console.log("📦 신고 응답:", res);
-            setReports(res);
+            const MAX_USER_ID = 40;
+            const userIds = Array.from({ length: MAX_USER_ID + 1 }, (_, i) => i);
+
+            const promises = userIds.map(async (userId) => {
+                try {
+                    const res = await getReportedPostsByUser(userId);
+                    return Array.isArray(res) ? res : [];
+                } catch (err) {
+                    return [];
+                }
+            });
+
+            const allReportsArrays = await Promise.all(promises);
+            const allReports = allReportsArrays.flat();
+
+            const uniqueReports = [];
+            const uniqueKeys = new Set();
+
+            allReports.forEach(report => {
+                if (!report) return;
+
+                const key = report.reportId
+                    ? report.reportId
+                    : `${report.postId}-${report.reportedAt}`;
+
+                if (!uniqueKeys.has(key)) {
+                    uniqueKeys.add(key);
+                    uniqueReports.push(report);
+                }
+            });
+
+            console.log("📦 신고 응답:", uniqueReports);
+            setReports(uniqueReports);
+
         } catch (err) {
             console.error("❌ API 호출 실패:", err);
             message.error("신고된 게시글 목록을 불러오는 데 실패했습니다.");
@@ -28,7 +58,6 @@ const ReportedPosts = () => {
             const detail = await getReportDetail(reportId);
             const postId = detail?.postId;
             if (postId) {
-                // 상세 페이지 경로가 토론 게시판 상세로 연결된다고 가정합니다.
                 navigate(`/discussion/${postId}`);
             } else {
                 message.warning("게시글 정보를 찾을 수 없습니다.");
@@ -67,7 +96,7 @@ const ReportedPosts = () => {
             width: "30%",
             align: 'center',
             render: (_, record) => (
-                <Button onClick={() => handleDetailClick(record.reportId)}>
+                <Button onClick={() => handleDetailClick(record.reportId || `${record.postId}-${record.reportedAt}`)}>
                     상세보기
                 </Button>
             ),
@@ -75,16 +104,14 @@ const ReportedPosts = () => {
     ];
 
     return (
-        // Layout과 Content 대신 div 사용
         <div>
             <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: '15px' }}>신고된 게시글</h2>
             <Table
-                size="small" // 테이블 행 높이 줄이기
+                size="small"
                 columns={columns}
                 dataSource={reports}
-                rowKey={(record) => record.reportId || `${record.postId}-${record.title}`}
+                rowKey={(record) => record.reportId || `${record.postId}-${record.reportedAt}`}
                 pagination={{ pageSize: 10 }}
-                // style에서 marginTop 제거
             />
         </div>
     );

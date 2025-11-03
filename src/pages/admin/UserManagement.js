@@ -60,14 +60,14 @@ const UserManagement = () => {
             dataIndex: "status",
             key: "status",
             render: (status) =>
-                status === "ACTIVE" ? <Tag color="green">정상</Tag> : <Tag color="red">정지됨</Tag>,
+                status === "active" ? <Tag color="green">정상</Tag> : <Tag color="red">정지됨</Tag>,
         },
         {
             title: "조치",
             key: "action",
             render: (_, record) => (
                 <>
-                    {record.status === "ACTIVE" ? (
+                    {record.status === "active" ? (
                         <Button danger onClick={() => handleSuspend(record.userId)}>정지</Button>
                     ) : (
                         <Button onClick={() => handleUnsuspend(record.userId)}>정지 해제</Button>

@@ -134,10 +134,15 @@ const DiscussionDetail = () => {
             <Card style={styles.postCard}>
                 <div style={styles.postHeader}>
                     <Title level={3} style={{flex: 1, margin: 0}}>{post.postTitle}</Title>
-                    <Button type="link" danger onClick={() => setIsReportModalVisible(true)}>게시글 신고</Button>
                 </div>
                 <Text type="secondary">{post.author} | {new Date(post.postDate).toLocaleString()}</Text>
                 <Paragraph style={styles.postContent}>{post.content}</Paragraph>
+
+                <div style={{textAlign: 'right', marginTop: '16px'}}>
+                    <Button type="primary" danger size="middle" onClick={() => setIsReportModalVisible(true)}>
+                        게시글 신고
+                    </Button>
+                </div>
             </Card>
 
             <Title level={4} style={{marginTop: '30px'}}>댓글</Title>

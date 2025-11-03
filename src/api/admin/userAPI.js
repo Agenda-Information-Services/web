@@ -8,7 +8,8 @@ export const getAllUsers = async () => {
 };
 
 export const getReportedPostsByUser = async (userId) => {
-    const res = await apiClient.get(`/admin/report/list?userId=${userId}`);
+    const endpoint = userId ? `/admin/report/list?userId=${userId}` : "/admin/report/list";
+    const res = await apiClient.get(endpoint);
     return res.data;
 };
 

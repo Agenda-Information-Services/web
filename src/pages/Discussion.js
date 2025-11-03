@@ -51,7 +51,7 @@ const Discussion = () => {
       title: <div style={{ textAlign: 'center', fontSize: '15px', fontWeight: 'bold' }}>제목</div>,
       dataIndex: "postTitle",
       key: "postTitle",
-      width: "50%",
+      width: "75%", // width: "50%"
       render: (text) => <span style={{ fontSize: "14px", paddingLeft: "10px" }}>{text}</span>,
     },
     {
@@ -62,6 +62,7 @@ const Discussion = () => {
       align: 'center',
       render: (date) => <span style={{ fontSize: "14px" }}>{new Date(date).toLocaleDateString()}</span>,
     },
+      /*
     {
       title: <span style={{ fontSize: '15px', fontWeight: 'bold' }}>작성자</span>,
       dataIndex: "author",
@@ -70,6 +71,7 @@ const Discussion = () => {
       align: 'center',
       render: (author) => <span style={{ fontSize: "14px" }}>{author}</span>,
     },
+       */
   ];
 
   if (loading) {
