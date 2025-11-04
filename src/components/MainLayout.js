@@ -33,9 +33,9 @@ const styles = {
     },
     content: {
         paddingTop: '64px',
-        paddingBottom: '130px', // 퀵메뉴가 가리지 않도록 넉넉한 하단 여백 확보
+        paddingBottom: '130px',
         height: '100vh',
-        overflowY: 'auto',      // 스크롤이 필요할 때만 자동으로 나타나도록 변경
+        overflowY: 'auto',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',

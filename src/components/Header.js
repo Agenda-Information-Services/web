@@ -106,7 +106,7 @@ const UserHeader = () => {
 
     return (
         <Header style={styles.header}>
-            <div style={styles.logoSection} onClick={() => navigate("/")}>
+            <div style={styles.logoSection} onClick={() => navigate("/mainsearch")}>
                 <img src={Logo} alt="logo" style={styles.logoImage}/>
                 <Title level={4} style={{margin: 0}}>LegisLink</Title>
             </div>

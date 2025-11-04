@@ -23,9 +23,10 @@ import AdminReportDetailPage from "./pages/admin/AdminReportDetailPage";
 import Recommend from "./pages/RecommendedBills";
 import MainLayout from './components/MainLayout';
 import SurveyPopup from './components/SurveyPopup';
+import AuthLanding from './pages/AuthLanding'; // [추가] 새로운 랜딩 페이지 임포트
 
-const SURVEY_THRESHOLD_MINUTES = 5;
-const SURVEY_THRESHOLD_PAGES = 9;
+const SURVEY_THRESHOLD_MINUTES = 7;
+const SURVEY_THRESHOLD_PAGES = 25;
 const SURVEY_LINK = "https://forms.gle/T5dfHL2TFuzmvXWG8";
 
 const useSurveyTrigger = () => {
@@ -58,10 +59,13 @@ const useSurveyTrigger = () => {
 
 const AppContent = () => {
     const { showSurvey, handleClose } = useSurveyTrigger();
+    const isAuthLanding = useLocation().pathname === '/';
+
     return (
         <div className="App">
             <Routes>
-                <Route path="/" element={<MainLayout><MainSearch /></MainLayout>} />
+                <Route path="/" element={<AuthLanding />} />
+                <Route path="/mainsearch" element={<PrivateRoute><MainLayout><MainSearch /></MainLayout></PrivateRoute>} />
                 <Route path="/discussion" element={<MainLayout><Discussion /></MainLayout>} />
                 <Route path="/discussion/:postId" element={<MainLayout><DiscussionDetail /></MainLayout>} />
                 <Route path="/ranking" element={<MainLayout><Ranking /></MainLayout>} />
@@ -81,11 +85,13 @@ const AppContent = () => {
                 <Route path="/admin/report/:reportId" element={<AdminRoute><AdminReportDetailPage /></AdminRoute>} />
             </Routes>
 
-            <SurveyPopup
-                isVisible={showSurvey}
-                onClose={handleClose}
-                surveyLink={SURVEY_LINK}
-            />
+            {!isAuthLanding && (
+                <SurveyPopup
+                    isVisible={showSurvey}
+                    onClose={handleClose}
+                    surveyLink={SURVEY_LINK}
+                />
+            )}
         </div>
     );
 };

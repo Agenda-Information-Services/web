@@ -18,7 +18,7 @@ import proposerIcon2 from "../assets/icons/proposer.png";
 const menuItems = [
     {
         label: "법안 검색",
-        path: "/",
+        path: "/mainsearch",
         staticIcon: searchIcon2,
         hoverIcon: searchIcon,
     },
